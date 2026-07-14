@@ -1,0 +1,52 @@
+{
+  "entities": {
+    "Config": {
+      "title": "Config",
+      "description": "System configuration and administration credentials",
+      "type": "object",
+      "properties": {
+        "isConfigured": {
+          "type": "boolean",
+          "description": "Whether the admin password is set"
+        },
+        "password": {
+          "type": "string",
+          "description": "The admin password value"
+        }
+      },
+      "required": ["isConfigured", "password"]
+    },
+    "RosterShifts": {
+      "title": "RosterShifts",
+      "description": "Shifts for an employee in a given month",
+      "type": "object",
+      "properties": {
+        "employeeId": {
+          "type": "string"
+        },
+        "employeeName": {
+          "type": "string"
+        },
+        "level": {
+          "type": "string",
+          "enum": ["senior", "junior"]
+        },
+        "shifts": {
+          "type": "object",
+          "description": "Map of day number to shift info"
+        }
+      },
+      "required": ["employeeId", "employeeName", "level", "shifts"]
+    }
+  },
+  "firestore": {
+    "/config/{configId}": {
+      "schema": "Config",
+      "description": "Config parameters like admin password"
+    },
+    "/rosters/{rosterId}/shifts/{employeeId}": {
+      "schema": "RosterShifts",
+      "description": "Employee shifts for a given year-month roster"
+    }
+  }
+}

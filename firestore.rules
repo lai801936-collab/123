@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Catch-all default deny for unmapped collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions for validation
+    function isValidString(val, maxLen) {
+      return val is string && val.size() <= maxLen;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Config collection rules
+    match /config/{configId} {
+      allow read: if true;
+      allow create, update: if isValidId(configId) 
+        && request.resource.data.isConfigured is bool
+        && isValidString(request.resource.data.password, 128);
+      allow delete: if false;
+    }
+
+    // Rosters collection and employee shifts rules
+    match /rosters/{rosterId}/shifts/{employeeId} {
+      allow read: if true;
+      allow create, update: if isValidId(rosterId) && isValidId(employeeId)
+        && isValidString(request.resource.data.employeeId, 32)
+        && isValidString(request.resource.data.employeeName, 64)
+        && (request.resource.data.level == 'senior' || request.resource.data.level == 'junior')
+        && request.resource.data.shifts is map;
+      allow delete: if true;
+    }
+  }
+}

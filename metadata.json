@@ -1,0 +1,8 @@
+{
+  "name": "手術室自主排班系統",
+  "description": "提供護理人員進行自主排班與休假預約的醫院手術室排班系統。包含前台自主填報與後台護理長審核管理功能，並結合 Firebase 資料庫進行即時同步與排班規則檢驗。",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
